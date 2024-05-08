@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.table_header{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 20px;
+    background-color: rgb(240, 240, 240);
+}
+.table_header p{
+    color: #000;
+}
+
+.table_header button{
+    outline: none;
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #0298cf;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.table_header input{
+    padding: 6px 12px;
+    margin: 0 10p;
+    outline: none;
+    border: 1px solid #0298cf;
+    border-radius: 6px;
+    color: #0298cf;
+}
+
+.table_section{
+    overflow: auto;
+    margin-bottom: 30px;
+}
+.table_section table{
+    width: 100%;
+    table-layout: fixed;
+    min-width: 1000px;
+    border-collapse: collapse;
+}
+.table_section table thead th{
+    position: sticky;
+    top: 0;
+    background-color: #f6f9fc;
+    color: #8493a5;
+    font-size: 15px;
+}
+
+.table_section table thead th, .table_section table tbody td{
+    border-bottom: 1px solid #ddd;
+    padding: 10px 20px;
+    word-break: break-all;
+    text-align: center;
+}
+
+.table_section table tbody tr:hover td{
+    color: #0298cf;
+    background-color: #f6f9fc;
+}
+
+.table_section table tbody button{
+    outline: none;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 6px;
+    color: #fff;
+    font-size: 24px;
+}

@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+<?php 
+    session_start();
+    if(!isset($_SESSION['role']) || $_SESSION['role'] != "developer")
+        header("Location: ../login.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,18 +10,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tasks</title>
     <script src = "../../js/jquery-3.7.1.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel = "stylesheet" href = "../../css/table.css?refresh=<?php echo "0"; ?>">
 </head>
 <body>
-
-    <style>
-        #content table img{
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-        }
-    </style>
-
-    <div id = "content"></div>
+    <div>
+        <div class = "table_header">
+            <p class = "table_title">Assigned Tasks</p>
+        </div>
+        <div class = "table_section assigned"></div>
+    </div>
+    
+    <div>
+        <div class = "table_header">
+            <p class = "table_title">Current Tasks</p>
+        </div>
+        <div class = "table_section current"></div>
+    </div>
+    
+    <div>
+        <div class = "table_header">
+            <p class = "table_title">Done Tasks</p>
+        </div>
+        <div class = "table_section done"></div>
+    </div>
+    
+    <div>
+        <div class = "table_header">
+            <p class = "table_title">Completed Tasks</p>
+        </div>
+        <div class = "table_section completed"></div>
+    </div>
 
     <script>
         $(document).ready(function (){
@@ -26,7 +49,11 @@
                 type: 'POST',
                 async: true,
                 success: function(response){
-                    $("#content").html(response);
+                    response = JSON.parse(response);
+                    $(".assigned").html(response['assigned']);
+                    $(".current").html(response['current']);
+                    $(".done").html(response['done']);
+                    $(".completed").html(response['completed']);
                 }
             });
         });
@@ -43,7 +70,11 @@
                         type: 'POST',
                         async: true,
                         success: function(response){
-                            $("#content").html(response);
+                            response = JSON.parse(response);
+                            $(".assigned").html(response['assigned']);
+                            $(".current").html(response['current']);
+                            $(".done").html(response['done']);
+                            $(".completed").html(response['completed']);
                         }
                     });
                 }
@@ -62,7 +93,11 @@
                         type: 'POST',
                         async: true,
                         success: function(response){
-                            $("#content").html(response);
+                            response = JSON.parse(response);
+                            $(".assigned").html(response['assigned']);
+                            $(".current").html(response['current']);
+                            $(".done").html(response['done']);
+                            $(".completed").html(response['completed']);
                         }
                     });
                 }
@@ -81,7 +116,11 @@
                         type: 'POST',
                         async: true,
                         success: function(response){
-                            $("#content").html(response);
+                            response = JSON.parse(response);
+                            $(".assigned").html(response['assigned']);
+                            $(".current").html(response['current']);
+                            $(".done").html(response['done']);
+                            $(".completed").html(response['completed']);
                         }
                     });
                 }
@@ -100,7 +139,11 @@
                         type: 'POST',
                         async: true,
                         success: function(response){
-                            $("#content").html(response);
+                            response = JSON.parse(response);
+                            $(".assigned").html(response['assigned']);
+                            $(".current").html(response['current']);
+                            $(".done").html(response['done']);
+                            $(".completed").html(response['completed']);
                         }
                     });
                 }

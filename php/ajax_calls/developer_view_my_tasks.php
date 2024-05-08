@@ -1,14 +1,16 @@
 <?php session_start();
+    if(!isset($_SESSION['role'])) return;
+    
     require '../connect.php';
     include '../task_worked_time_for_dev.php';
     include '../common_functions.php';
 
     $devID = $_SESSION['id'];
 
-    $output_assigned = "<h3>New Tasks:</h3>";
-    $output_current = "<h3>Current Tasks:</h3>";
-    $output_done = "<h3>Done Tasks:</h3>";
-    $output_completed = "<h3>Completed Tasks:</h3>";
+    $output_assigned = "";
+    $output_current = "";
+    $output_done = "";
+    $output_completed = "";
     
     $sql = "SELECT hoursPerDay FROM Developers WHERE id = '$devID'";
     $res = mysqli_query($con, $sql);
@@ -20,6 +22,7 @@
     $res_assignedTasks = mysqli_query($con, $sql);
 
     $output_assigned .= "<table>";
+    $output_assigned .= "<thead>";
     $output_assigned .= "<tr>";
     $output_assigned .= "<th>Task</th>";
     $output_assigned .= "<th>Project</th>";
@@ -28,6 +31,8 @@
     $output_assigned .= "<th>Actions</th>";
     $output_assigned .= "<th></th>";
     $output_assigned .= "</tr>";
+    $output_assigned .= "</thead>";
+    $output_assigned .= "<tbody>";
     while($row = mysqli_fetch_array($res_assignedTasks)){
         $estimatedTimeInSeconds = $row['estimatedSeconds'] + ($row['estimatedMinutes'] * 60) + ($row['estimatedHours'] * 60 * 60);
         $estimatedTimeArray = seperateDateTime($estimatedTimeInSeconds, $hoursPerDay);
@@ -44,11 +49,12 @@
         $output_assigned .= "<td>".$estimatedTime."</td>";
         $output_assigned .= "<td>".$row['dateCreated']."</td>";
         $output_assigned .= "<td>";
-        $output_assigned .= "<img src = '../../images/start.png' alt = 'Start Task' onclick = 'imgStartTask_clicked(".$row['taskID'].")',>";
+        $output_assigned .= "<button style = 'background-color: #88B04B;' onclick = 'imgStartTask_clicked(".$row['taskID'].")'><i class='bx bx-play' ></i></button>";
         $output_assigned .= "</td>";
         $output_assigned .= "<td id = 'assignedTasks_feedback_".$row['taskID']."'></td>";
         $output_assigned .= "</tr>";
     }
+    $output_assigned .= "</tbody>";
     $output_assigned .= "</table>";
 
     
@@ -56,6 +62,7 @@
     $res_currentTasks = mysqli_query($con, $sql);
     
     $output_current .= "<table>";
+    $output_current .= "<thead>";
     $output_current .= "<tr>";
     $output_current .= "<th>Task</th>";
     $output_current .= "<th>Project</th>";
@@ -66,6 +73,8 @@
     $output_current .= "<th>Actions</th>";
     $output_current .= "<th></th>";
     $output_current .= "</tr>";
+    $output_current .= "</thead>";
+    $output_current .= "<tbody>";
     while($row = mysqli_fetch_array($res_currentTasks)){
         $estimatedTimeInSeconds = $row['estimatedSeconds'] + ($row['estimatedMinutes'] * 60) + ($row['estimatedHours'] * 60 * 60);
         $estimatedTimeArray = seperateDateTime($estimatedTimeInSeconds, $hoursPerDay);
@@ -92,20 +101,22 @@
         $output_current .= "<td>".$workedTime."</td>";
         $output_current .= "<td>";
         if($row['status'] == 'in progress')
-            $output_current .= "<img src = '../../images/on_hold.png' alt = 'Pause Task' onclick = 'imgPauseTask_clicked(".$row['taskID'].")'>";
+            $output_current .= "<button style = 'background-color: #EFC050;' onclick = 'imgPauseTask_clicked(".$row['taskID'].")'><i class='bx bx-pause-circle' ></i></button> ";
         else if($row['status'] == 'on hold')
-            $output_current .= "<img src = '../../images/resume.png' alt = 'Resume Task' onclick = 'imgResume_clicked(".$row['taskID'].")'>";
-        $output_current .= "<img src = '../../images/done.png' alt = 'Done Task' onclick = 'imgDone_clicked(".$row['taskID'].")'>";
+            $output_current .= "<button style = 'background-color: #009B77;' onclick = 'imgResume_clicked(".$row['taskID'].")'><i class='bx bx-play-circle'></i></button> ";
+        $output_current .= "<button style = 'background-color: #55B4B0;' onclick = 'imgDone_clicked(".$row['taskID'].")'><i class='bx bx-check-circle' ></i></button>";
         $output_current .= "</td>";
         $output_current .= "<td id = 'currentTasks_feedback_".$row['taskID']."'></td>";
         $output_current .= "</tr>";
     }
+    $output_current .= "</tbody>";
     $output_current .= "</table>";
 
     $sql = "SELECT Tasks.id AS taskID, taskName, estimatedHours, estimatedMinutes, estimatedSeconds, projectName, Tasks.dateCreated, Statuses.status FROM Tasks LEFT JOIN Projects ON Projects.id = projectID LEFT JOIN ($lastEvent) AS lastEvent ON lastEvent.taskID = Tasks.id LEFT JOIN Statuses ON Statuses.id = lastEvent.statusID WHERE assignedDeveloper = '$devID' AND (statusID = '5')";
     $res_doneTasks = mysqli_query($con, $sql);
     
     $output_done .= "<table>";
+    $output_done .= "<thead>";
     $output_done .= "<tr>";
     $output_done .= "<th>Task</th>";
     $output_done .= "<th>Project</th>";
@@ -113,6 +124,8 @@
     $output_done .= "<th>Estimated Time</th>";
     $output_done .= "<th>Worked Time</th>";
     $output_done .= "</tr>";
+    $output_done .= "</thead>";
+    $output_done .= "<tbody>";
     while($row = mysqli_fetch_array($res_doneTasks)){
         $estimatedTimeInSeconds = $row['estimatedSeconds'] + ($row['estimatedMinutes'] * 60) + ($row['estimatedHours'] * 60 * 60);
         $estimatedTimeArray = seperateDateTime($estimatedTimeInSeconds, $hoursPerDay);
@@ -138,12 +151,14 @@
         $output_done .= "<td>".$workedTime."</td>";
         $output_done .= "</tr>";
     }
+    $output_done .= "</tbody>";
     $output_done .= "</table>";
     
     $sql = "SELECT Tasks.id AS taskID, taskName, estimatedHours, estimatedMinutes, estimatedSeconds, projectName, Tasks.dateCreated, Statuses.status FROM Tasks LEFT JOIN Projects ON Projects.id = projectID LEFT JOIN ($lastEvent) AS lastEvent ON lastEvent.taskID = Tasks.id LEFT JOIN Statuses ON Statuses.id = lastEvent.statusID WHERE assignedDeveloper = '$devID' AND (statusID = '6')";
     $res_completedTasks = mysqli_query($con, $sql);
 
     $output_completed .= "<table>";
+    $output_completed .= "<thead>";
     $output_completed .= "<tr>";
     $output_completed .= "<th>Task</th>";
     $output_completed .= "<th>Project</th>";
@@ -151,6 +166,8 @@
     $output_completed .= "<th>Estimated Time</th>";
     $output_completed .= "<th>Worked Time</th>";
     $output_completed .= "</tr>";
+    $output_completed .= "</thead>";
+    $output_completed .= "<tbody>";
     while($row = mysqli_fetch_array($res_completedTasks)){
         $estimatedTimeInSeconds = $row['estimatedSeconds'] + ($row['estimatedMinutes'] * 60) + ($row['estimatedHours'] * 60 * 60);
         $estimatedTimeArray = seperateDateTime($estimatedTimeInSeconds, $hoursPerDay);
@@ -176,10 +193,8 @@
         $output_completed .= "<td>".$workedTime."</td>";
         $output_completed .= "</tr>";
     }
+    $output_completed .= "</tbody>";
     $output_completed .= "</table>";
 
-    echo $output_assigned;
-    echo $output_current;
-    echo $output_done;
-    echo $output_completed;
+    echo json_encode(array("assigned" => $output_assigned, "current" => $output_current, "done" => $output_done, "completed" => $output_completed));
 ?>

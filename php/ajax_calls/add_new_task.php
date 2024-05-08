@@ -1,4 +1,7 @@
-<?php require '../connect.php';
+<?php session_start();
+    if(!isset($_SESSION['role'])) return;
+    
+    require '../connect.php';
     include '../common_functions.php';
     $projectID = $_POST['projectID'];
     $taskName = removeExtraWhitespaces($_POST['taskName']); 

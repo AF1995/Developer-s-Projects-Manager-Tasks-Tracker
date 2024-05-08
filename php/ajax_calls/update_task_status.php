@@ -1,4 +1,7 @@
-<?php require '../connect.php';
+<?php session_start();
+    if(!isset($_SESSION['role'])) return;
+    
+    require '../connect.php';
     $status = $_POST['statusID'];
     $taskID = $_POST['taskID'];
     $devID = $_POST['devID'];

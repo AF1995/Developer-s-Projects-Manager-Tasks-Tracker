@@ -1,3 +1,8 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['role']) || $_SESSION['role'] != "leader")
+        header("Location: ../login.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,34 +10,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects</title>
     <script src = "../../js/jquery-3.7.1.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel = "stylesheet" href = "../../css/table.css?refresh=<?php echo "0"; ?>">
 </head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+        font-family: 'Poppins', sans-serif;
+    }
+</style>
 <body>
-    <style>
-        #search{
-            text-align: center;
-            margin-bottom: 30px;
-        }
 
-        #projects{
-            text-align: center;
-        }
-        #projects table{
-            margin: auto;
-        }
-        #projects img{
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-        }
-    </style>
-
-    <div id = "search">
-        Search: <input type = "text" id = "txtSearch">
-        <input type = "button" value = "Create Project" onclick = "btnCreateProject_clicked()">
-        <p id = "feedback"></p>
+    <div class = "projects_table">
+        <div class = "table_header">
+            <p>Projects</p>
+            <p id = "feedback"></p>
+            <div>
+                <input type = "text" placeholder = "Search / Create" id = "txtSearch">
+                <button onclick = "btnCreateProject_clicked()">Create Project</button>
+            </div>
+        </div>
+        <div class = "table_section"></div>
     </div>
-
-    <div id = "projects"></div>
 
     <script>
         $(document).ready(function() {
@@ -41,8 +44,7 @@
                 type: 'POST',
                 async: true,
                 success: function(response){
-                    $("#projects").html(response);
-                    img_archive_addEvent();
+                    $(".table_section").html(response);
                 }
             });
         });
@@ -56,8 +58,7 @@
                     type: 'POST',
                     async: true,
                     success: function(response){
-                        $("#projects").html(response);
-                        img_archive_addEvent();
+                        $(".table_section").html(response);
                     }
                 });
 
@@ -67,7 +68,7 @@
                 async: true,
                 data: {filter: filter},
                 success: function (response){
-                    $("#projects").html(response);
+                    $(".table_section").html(response);
                 } 
             });
         });
@@ -95,30 +96,23 @@
                         type: 'POST',
                         async: true,
                         success: function(response){
-                            $("#projects").html(response);
-                            img_archive_addEvent();
+                            $("table_section").html(response);
                         }
                     });
                 }
             });
         }
 
-        function img_archive_addEvent(){
-            $("#projects table img").on( "click", function() {
-                if(!($(this).attr('id').startsWith("projects_img_archive_")))
-                    return;
-                var projectID = $(this).attr('id').split('_')[3];
-                
-                $.ajax({
-                    url: '../ajax_calls/archive_record.php',
-                    type: 'POST',
-                    async: true,
-                    data: {tableName: "Projects", id: projectID},
-                    success: function(response){
-                        $('#viewProjects_feedback_' + projectID).html(response);
-                        $('#viewProjects_actions_' + projectID).html("...");
-                    }
-                });
+        function imgArchiveProject_clicked(projectID){
+            $.ajax({
+                url: '../ajax_calls/archive_record.php',
+                type: 'POST',
+                async: true,
+                data: {tableName: "Projects", id: projectID},
+                success: function(response){
+                    $('#viewProjects_feedback_' + projectID).html(response);
+                    $('#viewProjects_actions_' + projectID).html("...");
+                }
             });
         }
     </script>

@@ -1,4 +1,6 @@
-<?php
+<?php session_start();
+    if(!isset($_SESSION['role'])) return;
+    
     require '../php_mailer/src/PHPMailer.php';
     require '../php_mailer/src/SMTP.php';
     require '../php_mailer/src/Exception.php';

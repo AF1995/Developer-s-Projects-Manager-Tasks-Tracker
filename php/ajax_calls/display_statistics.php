@@ -1,11 +1,13 @@
 <?php session_start();
+    if(!isset($_SESSION['role'])) return;
+    
     require '../connect.php';
     include '../task_worked_time_for_dev.php';
     include '../common_functions.php';
 
     $devID = $_SESSION['id'];
 
-    $output_projectsWorkTime = "";
+    $output_projectsWorkTime = "<div class = 'list'>";
 
     $totalWorkedTime = array("days" => 0, "hours" => 0, "minutes" => 0, "seconds" => 0);
 
@@ -38,7 +40,7 @@
             if($taskWorkTime['seconds'] != 0) $workedTime .= $taskWorkTime['seconds']."s";
             if($workedTime == "") $workedTime = "0";
 
-            $subProjectOutput .= "<li>".$row['taskName'].": $workedTime</li>";
+            $subProjectOutput .= "<li class = 'li_".$project['id']."'><p>".$row['taskName']."</p> <span>$workedTime</span></li>";
 
             $projectWorkTime = addTwoSeperatedDateTime($projectWorkTime, $taskWorkTime, $hoursPerDay);
         }
@@ -51,7 +53,7 @@
         if($projectWorkTime['seconds'] != 0) $workedTime .= $projectWorkTime['seconds']."s";
         if($workedTime == "") $workedTime = "0";
 
-        $subProjectOutput = "<span id = 'block_".$project['id']."'>&#x25BC;&#x25B6;</span>".$project['name'].": $workedTime".$subProjectOutput;
+        $subProjectOutput = "<h2><span id = 'block_".$project['id']."' style = 'cursor: pointer;' onclick = 'toggleVisibility(\"li_".$project['id']."\")'>&#x25BC;</span>".$project['name'].": $workedTime</h2>".$subProjectOutput;
 
         $output_projectsWorkTime .= $subProjectOutput;
 
@@ -65,6 +67,8 @@
     if($totalWorkedTime['seconds'] != 0) $workedTime .= $totalWorkedTime['seconds']."s";
     if($workedTime == "") $workedTime = "0";
 
-    echo "<p>Total Worked Time: $workedTime </p>";
+    $output_projectsWorkTime .= "</div>";
+
+    echo "<h1>Total Worked Time: $workedTime </h1>";
     echo $output_projectsWorkTime;
 ?>

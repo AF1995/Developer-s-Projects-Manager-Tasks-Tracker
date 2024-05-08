@@ -1,3 +1,8 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['role']) || $_SESSION['role'] != "leader")
+        header("Location: ../login.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,48 +10,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Developer</title>
     <script src = "../../js/jquery-3.7.1.min.js"></script>
+    <link rel = "stylesheet" href = "../../css/form.css">
 </head>
+<style>
+    .container .form .input-box p{
+        text-align: left;
+        color: red;
+        margin-top: 5px;
+        margin-left: 20px;
+    }
+    #feedback{
+        text-align: center;
+    }
+</style>
 <body>
-    <div id = "form">
-        <table>
-            <tr>
-                <td><label for = "txtFname">First Name:</label></td>
-                <td><input type = "text" id = "txtFname"></td>
-                <td id = "feedback_fname"></td>
-            </tr>
-            <tr>
-                <td><label for = "txtLname">Last Name:</label></td>
-                <td><input type = "text" id = "txtLname"></td>
-                <td id = "feedback_lname"></td>
-            </tr>
-            <tr>
-                <td><label for = "txtEmail">Email:</label></td>
-                <td><input type = "text" id = "txtEmail"></td>
-                <td id = "feedback_email"></td>
-            </tr>
-            <tr>
-                <td><label for = "txtPhone">Phone:</label></td>
-                <td><input type = "text" id = "txtPhone"></td>
-                <td id = "feedback_phone"></td>
-            </tr>
-            <tr>
-                <td><label for = "txtHoursPerDay">Hours Per Day:</label></td>
-                <td><input type = "text" id = "txtHoursPerDay"></td>
-                <td id = "feedback_hoursPerDay"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type = "button" value = "Create" onclick = "btnCreate_clicked()"></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan = 3 id = "feedback"></td>
-            </tr>
-        </table>
-    </div>
+    <section class="container">
+        <header>Add Developer</header>
+        <div class = "form">
+            <div class = 'input-box'>
+                <label for = 'txtFname'>First Name</label>
+                <input type = 'text' placeholder = 'Enter first name' id = 'txtFname'>
+                <p id = "feedback_fname"></p>
+            </div>
+            <div class = 'input-box'>
+                <label for = 'txtLname'>Last Name</label>
+                <input type = 'text' placeholder = 'Enter last name' id = 'txtLname'>
+                <p id = "feedback_lname"></p>
+            </div>
+            <div class = 'input-box'>
+                <label for = 'txtEmail'>Email</label>
+                <input type = 'text' placeholder = 'Enter email' id = 'txtEmail'>
+                <p id = "feedback_email"></p>
+            </div>
+            <div class = 'input-box'>
+                <label for = 'txtPhone'>Phone</label>
+                <input type = 'text' placeholder = 'Enter phone' id = 'txtPhone'>
+                <p id = "feedback_phone"></p>
+            </div>
+            <div class = 'input-box'>
+                <label for = 'txtHoursPerDay'>Hours Per Day</label>
+                <input type = 'text' placeholder = 'Enter hours per day' id = 'txtHoursPerDay'>
+                <p id = "feedback_hoursPerDay"></p>
+            </div>
+            
+            <button onclick = "btnCreate_clicked()">Create</button>
+
+            <p id = "feedback"></p>
+        </div>
+    </section>
 
     <script>
         function btnCreate_clicked(){
+            $("#feedback").html("");
             $("#feedback_fname").html("");
             $("#feedback_lname").html("");
             $("#feedback_email").html("");

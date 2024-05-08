@@ -7,10 +7,10 @@
     $confirmPassword = $_POST['confirmPassword'];
     $err = "";
 
-    if(!validateName($name)) $err .= "Name must be 3 at least characters containing only alpabetic characters and spaces.<br>";
-    if(!validateEmail($email)) $err .= "Wrong email format.<br>";
-    if(strlen($password) < 8) $err .= "Password must be at least 8 characters long.<br>";
-    else if($password != $confirmPassword) $err .= "Password doesn't match.<br>";
+    if(!validateName($name)) $err .= "Name must be at least 3 characters containing only alpabetic characters and spaces.<br><br>";
+    if(!validateEmail($email)) $err .= "Wrong email format.<br><br>";
+    if(strlen($password) < 8) $err .= "Password must be at least 8 characters long.<br><br>";
+    else if($password != $confirmPassword) $err .= "Password doesn't match.<br><br>";
 
     if(!empty($err)){
         echo $err;

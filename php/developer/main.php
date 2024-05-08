@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+<?php 
+    session_start();
+    if(!isset($_SESSION['role']) || $_SESSION['role'] != "developer")
+        header("Location: ../login.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,40 +10,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main</title>
 </head>
-<body>
 <style>
-        #options{
-            text-align: center;
-        }
-        .option{
-            display: inline-block;
-            border: 1px solid black;
-            text-align: center;
-            color: black;
-            padding: 0;
-            margin: 20px;
-            width: 20%;
-            height: 150px;
-        }
-        .option h3{
-            border-bottom: dashed 1px black;
-            margin: 0;
-            padding: 10px;
-        }
-        .option p{
-            margin: 0;
-            padding: 10px;
-        }
-    </style>
-    <div id = "options">
-      <a href = "tasks.php"><div class = "option">
-        <h3>Tasks</h3>
-        <p>Manage your tasks.<br>Check your newly assigned tasks as well as the progress of your existing tasks along with the finished tasks.</p>
-      </div></a>
-      <a href = "statistics.php"><div class = "option">
-        <h3>Statistics</h3>
-        <p>See your overall statistics in this company. Details like total working time as well as per task and per project.</p>
-      </div></a>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-seris;
+    }
+    body{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f7f7f7;
+    }
+    #content{
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    #content .box{
+      position: relative;
+      width: 400px;
+      height: 100px;
+      background: #fff;
+      transition: 0.5s ease-in-out;
+      cursor: pointer;
+      box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.025);
+    }
+    #content .box:nth-child(1){
+      transform: translateX(-50px);
+    }
+    #content .box:nth-child(2){
+      transform: translateX(50px);
+    }
+    #content:hover .box:nth-child(1), #content:hover .box:nth-child(2){
+      transform: translateX(0);
+    }
+    #content .box::before{
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 100%;
+      background: var(--clr);
+      transition: 0.5s ease-in-out;
+    }
+    #content .box:hover::before{
+      width: 100%;
+    }
+    #content .box .option{
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+    #content .box .option .icon{
+      position: relative;
+      min-width: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #content .box .option .icon .bx{
+      font-size: 2.5em;
+      color: var(--clr);
+      transition: 0.5s ease-in-out;
+    }
+    #content .box:hover .option .icon .bx{
+      color: #fff;
+    }
+    #content .box .option .text h3{
+      font-weight: 500;
+      color: var(--clr);
+      transition: 0.5s ease-in-out;
+    }
+    #content .box .option .text p{
+      font-size: 0.9em;
+      color: #999;
+      transition: 0.5s ease-in-out;
+    }
+    #content .box:hover .option .text h3, #content .box:hover .option .text p{
+      color: #fff;
+    }
+</style>
+<body>
+  <div id = "content">
+    <div class = "box" style = "--clr: #a362ea" onclick = "window.location.href = 'tasks.php'">
+      <div class = "option">
+        <div class = "icon"><i class='bx bx-task' ></i></div>
+        <div class = "text">
+          <h3>Tasks</h3>
+          <p>Manage and track your tasks</p>
+        </div>
+      </div>
     </div>
+    <div class = "box" style = "--clr: #fc5f9b" onclick = "window.location.href = 'statistics.php'">
+      <div class = "option">
+        <div class = "icon"><i class='bx bx-bar-chart-alt-2' ></i></div>
+        <div class = "text">
+          <h3>Statistics</h3>
+          <p>Check your working time</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

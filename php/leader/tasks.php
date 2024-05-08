@@ -1,3 +1,8 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['role']) || $_SESSION['role'] != "leader")
+        header("Location: ../login.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,67 +10,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tasks</title>
     <script src = "../../js/jquery-3.7.1.min.js"></script>
+    <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel = "stylesheet" href = "../../css/table.css?time=<?php echo "0"; ?>">
 </head>
-<body>
-    <style>
-        #createNewTask{
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        #filter{
-            text-align: center;
-        }
-        #filter table{
-            display: inline-block;
-        }
-
-        #tasks{
-            text-align: center;
-        }
-        #tasks table{
-            margin: auto;
-        }
-        #tasks img{
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-        }
-    </style>
-    <div id = 'createNewTask'>
-        <input type = "button" value = "Create New Task" onclick = "btnCreateNewTask_clicked()">
-    </div>
-    <div id = "filter">
-        <h3>Filter:</h3>
-        <table>
-            <tr>
-                <th>Active</th>
-                <th>Filter By</th>
-                <th>Filter Value</th>
-            </tr>
-            <tr>
-                <td><input type = "checkbox" id = "chkTaskName" name = "chkTaskName" onchange = "triggerFilter()"></td>
-                <td>Task name:</td>
-                <td><input type = "text" id = "txtTaskName" onkeyup = "triggerFilter()"></td>
-            </tr>
-            <tr>
-                <td><input type = "checkbox" id = "chkProjectName" onchange = "triggerFilter()"></td>
-                <td>Project name:</td>
-                <td><input type = "text" id = "txtProjectName" onkeyup = "triggerFilter()"></td>
-            </tr>
-            <tr>
-                <td><input type = "checkbox" id = "chkStatus" onchange = "triggerFilter()"></td>
-                <td>Status:</td>
-                <td id = "filter_status"></td>
-            </tr>
-            <tr>
-                <td><input type = "checkbox" id = "chkDeveloper" onchange = "triggerFilter()"></td>
-                <td>Developer:</td>
-                <td id = "filter_developer"></td>
-            </tr>
-        </table>
-    </div>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+        font-family: 'Poppins', sans-serif;
+    }
     
-    <div id = "tasks"></div>
+    #filter h1{
+        text-align: center;
+    }
+    #filter table{
+        border: 1px solid rgba(132, 147, 165, .2);
+        padding: 20px 10px;
+        border-radius: 10px;
+    }
+    #filter table thead tr th{
+        border-bottom: 1px solid #8493a5;
+    }
+    #filter table tr td{
+        vertical-align: top;
+        padding: 10px;
+    }
+    #filter table tr th{
+        padding: 10px;
+    }
+    #filter table tr td:first-child{
+        text-align: center;
+    }
+    #filter table tr td:last-child{
+        vertical-align: inherit;
+    }
+    #filter table tr td:nth-child(2){
+        text-align: right;
+    }
+    #filter table input{
+        padding: 6px 12px;
+        margin: 0 10p;
+        outline: none;
+        border: 1px solid #0298cf;
+        border-radius: 6px;
+        color: #0298cf;
+    }
+    [type|="checkbox"]{
+        width: 16px;
+        height: 16px;
+    }
+</style>
+<body>    
+    <div>
+        <div class = "table_header">
+            <p class = "table_title">Tasks</p>
+            <div id = "filter">
+                <h1>Filter</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Active</th>
+                            <th>Filter By</th>
+                            <th>Filter Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type = "checkbox" id = "chkTaskName" name = "chkTaskName" onchange = "triggerFilter()"></td>
+                            <td>Task name:</td>
+                            <td><input type = "text" id = "txtTaskName" onkeyup = "triggerFilter()"></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "checkbox" id = "chkProjectName" onchange = "triggerFilter()"></td>
+                            <td>Project name:</td>
+                            <td><input type = "text" id = "txtProjectName" onkeyup = "triggerFilter()"></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "checkbox" id = "chkStatus" onchange = "triggerFilter()"></td>
+                            <td>Status:</td>
+                            <td id = "filter_status"></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "checkbox" id = "chkDeveloper" onchange = "triggerFilter()"></td>
+                            <td>Developer:</td>
+                            <td id = "filter_developer"></td>
+                        </tr>
+                    <tbody>
+                </table>
+            </div>
+            <div class = "table_button">
+                <button class = "create_new_task" onclick = "btnCreateNewTask_clicked()">Create New Task</button>
+            </div>
+        </div>
+        <div class = "table_section"></div>
+    </div>
 
     <script>
         $(document).ready(function(){
@@ -93,7 +135,7 @@
                 type: 'POST',
                 async: true,
                 success: function(response){
-                    $("#tasks").html("<h3>Tasks:</h3>" + response);
+                    $(".table_section").html(response);
                 }
             });
         });
@@ -114,7 +156,7 @@
                     type: 'POST',
                     async: true,
                     success: function(response){
-                        $("#tasks").html("<h3>Tasks:</h3>" + response);
+                        $(".table_section").html(response);
                     }
                 });
                 return;
@@ -139,7 +181,7 @@
                 async: true,
                 data: {isActive_taskName: isActive_taskName, isActive_projectName: isActive_projectName, isActive_status: isActive_status, isActive_developer: isActive_developer, taskName: taskName, projectName: projectName, statuses: JSON.stringify(statuses), developers: JSON.stringify(developers)},
                 success: function(response){
-                    $("#tasks").html("<h3>Tasks:</h3>" + response);
+                    $(".table_section").html(response);
                 }
             });
         }

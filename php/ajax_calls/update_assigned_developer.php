@@ -1,4 +1,7 @@
-<?php require '../connect.php';
+<?php session_start();
+    if(!isset($_SESSION['role'])) return;
+    
+    require '../connect.php';
     $newAssignedDeveloper = $_POST['newAssignedDeveloper'];
     $taskID = $_POST['taskID'];
     $sql = "";

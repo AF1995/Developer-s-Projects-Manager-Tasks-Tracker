@@ -1,4 +1,6 @@
 <?php session_start();
+    if(!isset($_SESSION['role'])) return;
+
     require '../connect.php';
     include '../common_functions.php';
 
@@ -55,11 +57,10 @@
     if($isDirty) die(json_encode($output));
 
     // Check if the email already exists for the current user:
-    $sql = "SELECT email FROM Developers WHERE userID = '".$_SESSION['id']."'";
+    $sql = "SELECT id FROM Developers WHERE userID = '".$_SESSION['id']."' AND email = '$email'";
     $res = mysqli_query($con, $sql);
-    while($row = mysqli_fetch_array($res))
-        if($row['email'] == $email)
-            die(json_encode(array("fname" => "", "lname" => "", "email" => "Email already exists.", "phone" => "", "hoursPerDay" => "", "response" => "", "sendEmail" => "")));
+    if(mysqli_num_rows($res) > 0)
+        die(json_encode(array("fname" => "", "lname" => "", "email" => "Email already exists.", "phone" => "", "hoursPerDay" => "", "response" => "", "sendEmail" => "")));
 
     // Generate a password for the developer:
     $password = generatePassowrd();

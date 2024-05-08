@@ -1,3 +1,8 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['role']) || $_SESSION['role'] != "leader")
+        header("Location: ../login.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,10 +10,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Task</title>
     <script src = "../../js/jquery-3.7.1.min.js"></script>
+    <link rel = "stylesheet" href = "../../css/form.css">
 </head>
+<style>
+    .container .form .column .txtEstimatedTime{
+        width: 65px;
+    }
+</style>
 <body>
-    <div id = "addTask"></div>
-    
+    <section class="container">
+        <header>Add Task</header>
+        <div class = "form" id = "addTask"></div>
+    </section>
+
     <script>
         $(document).ready(function(){
             $.ajax({

@@ -1,4 +1,7 @@
-<?php require '../connect.php';
+<?php session_start();
+    if(!isset($_SESSION['role'])) return;
+    
+    require '../connect.php';
     include '../common_functions.php';
     $taskID = $_POST['taskID'];
 
@@ -55,13 +58,15 @@
             $totalWorkedTime = addTwoSeperatedDateTime($totalWorkedTime, $current, $hoursPerDay);
         }
     }
-
-    echo "<h3>Work Time per Developer:</h3>";
+    
     echo "<table>";
+    echo "<thead>";
     echo "<tr>";
     echo "<th>Developer</th>";
     echo "<th>Total Time</th>";
     echo "</tr>";
+    echo "</thead>";
+    echo "<tbody>";
     foreach($devsWorkedTime as $devID => $devWorkTime){
         $sql = "SELECT CONCAT(fname, ' ', lname) AS devName FROM Developers WHERE id = '".$devID."'";
         $res = mysqli_query($con, $sql);
@@ -76,6 +81,7 @@
         echo "<td>".$workTime."</td>";
         echo "</tr>";
     }
+    echo "</tbody>";
     echo "</table>";
 
     $workTime = "";
@@ -83,5 +89,6 @@
     if($totalWorkedTime['hours'] != 0) $workTime .= $totalWorkedTime['hours']."h ";
     if($totalWorkedTime['minutes'] != 0) $workTime .= $totalWorkedTime['minutes']."m ";
     if($totalWorkedTime['seconds'] != 0) $workTime .= $totalWorkedTime['seconds']."s";
-    echo "<h3>Total Time Worked: $workTime</h3>";
+    echo "-";
+    echo "Total Time Worked: $workTime";
 ?>

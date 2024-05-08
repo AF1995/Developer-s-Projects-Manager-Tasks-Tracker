@@ -1,3 +1,9 @@
+
+<?php 
+    session_start();
+    if(!isset($_SESSION['role']) || $_SESSION['role'] != "leader")
+        header("Location: ../login.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,13 +11,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Task</title>
     <script src = "../../js/jquery-3.7.1.min.js"></script>
+    <link rel = "stylesheet" href = "../../css/table.css?refresh=<?php echo "0"; ?>">
 </head>
+<style>
+    .table_header{
+        justify-content: center;
+        font-size: 16;
+    }
+    #task_general_info{
+        text-align: center;
+        font-weight: 600;
+        padding: 20px;
+        background: #f6f9fc;
+        color: #8493a5;
+    }
+</style>
 <body>
-    <h3 id = "taskNameAndDate"></h3>
+    <p id = "task_general_info">
+        <span id = "taskNameAndDate"></span> - <span id = "totalWorkTime"></span>
+    </p>
     
-    <div id = "tasksEvents"></div>
+    <div>
+        <div class = "table_header">
+            <p>Events</p>
+        </div>
+        <div class = "table_section tasksEvents"></div>
+    </div>
 
-    <div id = "workTime"></div>
+    <div>
+        <div class = "table_header">
+            <p>Work Time per Developer</p>
+        </div>
+        <div class = "table_section workTime"></div>
+    </div>
     
     <script>
         $(document).ready(function (){
@@ -31,7 +63,7 @@
                 async: true,
                 data: {taskID: <?php echo $_GET['id']; ?>},
                 success: function(response){
-                    $("#tasksEvents").html("<h3>Events:</h3>" + response);
+                    $(".tasksEvents").html(response);
                 }
             });
 
@@ -41,7 +73,8 @@
                 async: true,
                 data: {taskID: <?php echo $_GET['id']; ?>},
                 success: function(response){
-                    $("#workTime").html(response);
+                    $(".workTime").html(response.split("-")[0]);
+                    $("#totalWorkTime").html(response.split("-")[1]);
                 }
             });
         });

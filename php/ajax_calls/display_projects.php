@@ -1,4 +1,6 @@
 <?php session_start();
+    if(!isset($_SESSION['role'])) return;
+    
     require '../connect.php';
 
     $projectsData = array();
@@ -21,21 +23,29 @@
     }
 
     echo "<table>";
+    echo "<thead>";
     echo "<tr>";
     echo "<th>Project Name</th>";
     echo "<th>Number of Tasks</th>";
     echo "<th>Number of Envolved Developers</th>";
     echo "<th>Actions</th>";
-    echo "<th></th>";
+    echo "<th>Feedback</th>";
     echo "</tr>";
+    echo "</thead>";
+    echo "<tbody>";
     foreach($projectsData as $projectData){
         echo "<tr>";
         echo "<td id = 'viewProjects_projectName_".$projectData[3]."'>".$projectData[0]."</td>";
         echo "<td id = 'viewProjects_numberOfTasks_".$projectData[3]."'>".$projectData[1]."</td>";
         echo "<td id = 'viewProjects_numberOfEnvolvedDevelopers_".$projectData[3]."'>".$projectData[2]."</td>";
-        echo "<td id = 'viewProjects_actions_".$projectData[3]."'><a href = 'view_project.php?id=".$projectData[3]."'><img src = '../../images/view.png' alt = 'View project'></a> <a href = 'edit_project.php?id=".$projectData[3]."'><img src = '../../images/edit.png' alt = 'Edit project'></a><img src = '../../images/archive.png' alt = 'Archive project' id = 'projects_img_archive_".$projectData[3]."'></td>";
+        echo "<td id = 'viewProjects_actions_".$projectData[3]."'><a href = 'view_project.php?id=".$projectData[3]."'>";
+        echo "<a href = 'view_project.php?id=".$projectData[3]."'><button style = 'background-color: #34568B;'><i class='bx bx-show'></i></button></a> ";
+        echo "<a href = 'edit_project.php?id=".$projectData[3]."'><button style = 'background-color: #0298cf;'><i class='bx bx-edit' ></i></button></a> ";
+        echo "<button style = 'background-color: #DD4124;' onclick = 'imgArchiveProject_clicked(".$projectData[3].")'><i class='bx bxs-file-archive'></i></button>";
+        echo "</td>";
         echo "<td id = 'viewProjects_feedback_".$projectData[3]."'></td>";
         echo "</tr>";
     }
+    echo "</tbody>";
     echo "</table>";
 ?>

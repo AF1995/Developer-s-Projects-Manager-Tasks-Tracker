@@ -1,3 +1,8 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['role']) || $_SESSION['role'] != "leader")
+        header("Location: ../login.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,28 +10,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Developers</title>
     <script src = "../../js/jquery-3.7.1.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel = "stylesheet" href = "../../css/table.css?refresh=<?php echo "0"; ?>">
 </head>
 <body>
-    <style>
-        #searchOrCreateDev, #developers{
-            text-align: center;
-        }
-        #developers table{
-            display: inline-block;
-        }
-        #developers table img{
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-        } 
-    </style>
-
-    <div id = "searchOrCreateDev">
-        <label for = "txtSearch">Search: </label><input type = "text" id = "txtSearch" onkeyup = "txtSearch_keyUp()">
-        <input type = 'button' value = "Create a New Developer Account" onclick = "btnCreateANewDeveloperAccount_clicked()">
+    <div>
+        <div class = "table_header">
+            <p class = "table_title">Developers</p>
+            <div>
+                <input type = "text" id = "txtSearch" onkeyup = "txtSearch_keyUp()" placeholder = "Search">
+                <button onclick = "btnAddNewDeveloper_clicked()">Add New</button>
+            </div>
+        </div>
+        <div class = "table_section developers"></div>
     </div>
-
-    <div id = "developers"></div>
 
     <script>
         $(document).ready(function(){
@@ -35,7 +32,7 @@
                 type: 'POST',
                 async: true,
                 success: function(response){
-                    $("#developers").html(response);
+                    $(".developers").html(response);
                 }
             });
         });
@@ -61,7 +58,7 @@
                     type: 'POST',
                     async: true,
                     success: function(response){
-                        $("#developers").html(response);
+                        $(".developers").html(response);
                     }
                 });
                 return;
@@ -73,12 +70,12 @@
                 async: true,
                 data: {search: search},
                 success: function(response){
-                    $("#developers").html(response);
+                    $(".developers").html(response);
                 }
             });
         }
 
-        function btnCreateANewDeveloperAccount_clicked(){
+        function btnAddNewDeveloper_clicked(){
             window.location.href = "create_developer.php";
         }
     </script>

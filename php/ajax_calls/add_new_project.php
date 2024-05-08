@@ -1,4 +1,6 @@
 <?php session_start();
+    if(!isset($_SESSION['role'])) return;
+
     require '../connect.php';
     include '../common_functions.php';
     $projectName = $_POST['projectName'];
@@ -17,6 +19,6 @@
 
     // Add the new project:
     $sql = "INSERT INTO Projects(projectName, userID) VALUES('$projectName', '".$_SESSION['id']."')";
-    mysqli_query($con, $sql) or die("SOmethign went wrong while adding the new project.");
+    mysqli_query($con, $sql) or die("Somethign went wrong while adding the new project.");
     echo "Successfully added the new project.";
 ?>
