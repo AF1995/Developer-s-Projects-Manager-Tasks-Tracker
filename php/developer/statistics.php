@@ -24,8 +24,7 @@
         justify-content: center;
         align-content: center;
         min-height: 100vh;
-        background: #111;
-    }
+    }   
 
     h1{ 
         background-color: #03a9f4;
@@ -52,6 +51,11 @@
     .list ul{
         position: relative;
         padding: 20px;
+        border: 1px dotted #03a9f4;
+    }
+    .list ul:last-child{    
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
     }
     .list ul li{
         position: relative;
