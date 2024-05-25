@@ -33,7 +33,7 @@
         $isDirty = true;
     }
 
-    if(!validatePhone($phone)){
+    if(!isPhoneCharactersOnly($phone)){
         $output['phone'] = "Wrong phone format.";
         $isDirty = true;
     }

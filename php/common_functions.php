@@ -202,8 +202,6 @@
         return true;
     }
 
-    // For now, we will assume Lebanese numbers only... might add support for other countries at a later state.
-    // A phone must contain 8 numbers.
     function validatePhone($str)
     {
         // if(strlen($str) != 8)
